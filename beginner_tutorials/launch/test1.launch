@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<launch>
+	<!--
+	<node pkg="tf" type="static_transform_publisher"
+    	name="map_transfor"
+    	args="0 0 0 0 0 0 map odom_tf 100"/>
+    	-->
+ 		<node name="gmap_node" pkg="gmapping" type="slam_gmapping">
+			<remap from= "scan" to="depth_scan"/>
+		</node>   	
+    	<include file="$(find openni_launch)/launch/openni.launch"/>
+
+
+    	<!--
+    	<node pkg="tf" type="static_transform_publisher"
+    	name="map_transform2"
+    	args="0 0 0 0 0 0 map odom 100"/>
+    	-->
+		
+    	<node pkg="tf" type="static_transform_publisher"
+    	name="map_transform3"
+    	args="0 0 0.5 0 0 0 base_footprint base_link 100"/>
+    	<!--
+    	<node pkg="tf" type="static_transform_publisher"
+    	name="map_transform4"    	
+    	args="0 0 0.5 0 0 0 base_footprint base_link 100"/>
+    	-->
+    	
+    	 <node pkg="tf" type="static_transform_publisher"
+    	name="map_transform5"
+    	args="0 0 0 0 0 0 base_link camera_link 100"/>
+    			
+    	<node respawn="true" pkg="joy" type="joy_node" name="xbox_joy" >
+    	</node>
+    	
+    	<node name="bot_odometry" pkg="beginner_tutorials" type="odom_publisher" />
+
+
+    	<!--
+    	<include file="$(find rosserial_server)/launch/socket.launch"/>
+    	-->
+    	<node pkg="depthimage_to_laserscan" name="depthimage_to_laserscan" type="depthimage_to_laserscan">
+		<remap from="image" to="camera/depth/image_raw"/>
+		<remap from="scan" to="depth_scan"/>
+		<param name="output_frame_id" value="camera_depth_frame" />
+		<param name="range_min" value="0.45" />
+  	</node>
+    			
+</launch>
